@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Bourse d'Algerie Data API documentation">
+    <title>Bourse d'Algerie Data API</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --background: #0b1120;
+            --surface: #111b2e;
+            --surface-soft: #17243b;
+            --border: #263956;
+            --text: #e7edf7;
+            --muted: #9aabc4;
+            --accent: #55d6be;
+            --accent-soft: rgba(85, 214, 190, .12);
+            --blue: #83a9ff;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 80% 0%, #18345b 0, transparent 36rem),
+                var(--background);
+            font: 16px/1.6 Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+        }
+
+        a { color: var(--accent); }
+
+        .shell {
+            width: min(1120px, calc(100% - 2rem));
+            margin: 0 auto;
+        }
+
+        header { padding: 5rem 0 3rem; }
+
+        .eyebrow {
+            color: var(--accent);
+            font-size: .8rem;
+            font-weight: 700;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+        }
+
+        h1, h2, h3 { line-height: 1.2; }
+        h1 { max-width: 760px; margin: .7rem 0 1rem; font-size: clamp(2.4rem, 7vw, 5rem); }
+        h2 { margin-top: 0; font-size: 1.55rem; }
+        h3 { margin: 0 0 .55rem; font-size: 1.05rem; }
+        p { color: var(--muted); }
+
+        .lead { max-width: 680px; font-size: 1.1rem; }
+
+        .base-url {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: .65rem .9rem;
+            border: 1px solid var(--border);
+            border-radius: .55rem;
+            background: var(--surface);
+            color: var(--blue);
+            font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+        }
+
+        main { padding-bottom: 4rem; }
+
+        section {
+            margin: 1.25rem 0;
+            padding: clamp(1.2rem, 3vw, 2rem);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            background: rgba(17, 27, 46, .88);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+        }
+
+        .endpoint {
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: .75rem;
+            background: var(--surface-soft);
+        }
+
+        .endpoint-wide { grid-column: 1 / -1; }
+
+        .method {
+            display: inline-block;
+            margin-right: .5rem;
+            padding: .15rem .45rem;
+            border-radius: .3rem;
+            background: var(--accent-soft);
+            color: var(--accent);
+            font: 700 .72rem ui-monospace, SFMono-Regular, Consolas, monospace;
+        }
+
+        code {
+            color: var(--blue);
+            font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+        }
+
+        pre {
+            overflow-x: auto;
+            margin: .9rem 0 0;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: .55rem;
+            background: #09101e;
+            color: #d9e5f7;
+            font-size: .86rem;
+        }
+
+        .note {
+            padding: .8rem 1rem;
+            border-left: 3px solid var(--accent);
+            background: var(--accent-soft);
+            color: var(--muted);
+        }
+
+        footer {
+            padding: 1.5rem 0 3rem;
+            color: var(--muted);
+            font-size: .9rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="shell">
+        <div class="eyebrow">Developer documentation</div>
+        <h1>Bourse d'Algerie Data API</h1>
+        <p class="lead">
+            Read market companies, stock prices, trading session history, and
+            session details from the Algerian Stock Exchange.
+        </p>
+        <div class="base-url">http://localhost:3000</div>
+    </header>
+
+    <main class="shell">
+        <section>
+            <h2>Quick start</h2>
+            <p>Install dependencies and start the server from the project root.</p>
+            <pre><code>npm install
+node src/main.js
+
+# Open the documentation
+http://localhost:3000/docs</code></pre>
+            <p class="note">
+                The base URL in the examples is <code>http://localhost:3000</code>.
+                Replace it with your deployed host. Every data endpoint uses
+                <code>GET</code> and returns JSON.
+            </p>
+        </section>
+
+        <section>
+            <h2>Route index</h2>
+            <div class="grid">
+                <article class="endpoint">
+                    <h3><span class="method">GET</span><code>/</code></h3>
+                    <p>Serves this documentation page.</p>
+                    <pre><code>HTTP 200 — text/html</code></pre>
+                </article>
+                <article class="endpoint">
+                    <h3><span class="method">GET</span><code>/docs</code></h3>
+                    <p>Alias for the documentation page.</p>
+                    <pre><code>HTTP 200 — text/html</code></pre>
+                </article>
+                <article class="endpoint">
+                    <h3><span class="method">GET</span><code>/stocks/:type</code></h3>
+                    <p>Latest stock prices filtered by <code>all</code>, <code>main</code>, <code>bond</code>, or <code>sme</code>.</p>
+                </article>
+                <article class="endpoint">
+                    <h3><span class="method">GET</span><code>/market/companies/:market</code></h3>
+                    <p><code>main</code>, <code>bond</code>, or <code>sme</code>.</p>
+                </article>
+                <article class="endpoint endpoint-wide">
+                    <h3><span class="method">GET</span><code>/sessions/:market/history/:year</code></h3>
+                    <p>Session history for <code>main</code>, <code>bond</code>, or <code>sme</code>.</p>
+                </article>
+                <article class="endpoint endpoint-wide">
+                    <h3><span class="method">GET</span><code>/sessions/:market/details/:sessionID</code></h3>
+                    <p>Detailed securities data for one session and market.</p>
+                </article>
+            </div>
+        </section>
+
+        <section>
+            <h2>Stocks</h2>
+            <article class="endpoint endpoint-wide">
+                <h3><span class="method">GET</span><code>/stocks/:type</code></h3>
+                <p>Returns the latest prices shown on the SGBV home page. Use <code>all</code>, <code>main</code>, <code>bond</code>, or <code>sme</code> for the <code>type</code> parameter. The response is an object keyed by stock symbol.</p>
+                <pre><code>curl http://localhost:3000/stocks/all
+curl http://localhost:3000/stocks/main
+curl http://localhost:3000/stocks/bond
+curl http://localhost:3000/stocks/sme
+
+{
+  "ALL": {
+    "stockValue": "355,00",
+    "stockVar": "0,00"
+  },
+  "CPA": {
+    "stockValue": "2 300,00",
+    "stockVar": "0,00"
+  }
+}</code></pre>
+                <p>The complete response contains every stock currently published by SGBV.</p>
+            </article>
+        </section>
+
+        <section>
+            <h2>Companies</h2>
+            <p>Use one of the following market-specific paths. Each response has a <code>companies</code> array. The fields depend on the source table.</p>
+            <div class="grid">
+                <article class="endpoint">
+                    <h3><span class="method">GET</span><code>/market/companies/main</code></h3>
+                    <p>Main market listed companies.</p>
+                    <pre><code>curl http://localhost:3000/market/companies/main
+
+{
+  "companies": [
+    {
+      "Code ISIN": "DZ0000010037",
+      "Code": "ALL",
+      "Company name": "ALLIANCE ASSURANCES",
+      "Sector / Category": "ASSURANCE",
+      "Nominal Value  DA": "380",
+      "N of shares": "13 930 826"
+    }
+  ]
+}</code></pre>
+                </article>
+                <article class="endpoint">
+                    <h3><span class="method">GET</span><code>/market/companies/bond</code></h3>
+                    <p>Bond-market securities and issuers.</p>
+                    <pre><code>curl http://localhost:3000/market/companies/bond
+
+{
+  "companies": []
+}</code></pre>
+                </article>
+                <article class="endpoint endpoint-wide">
+                    <h3><span class="method">GET</span><code>/market/companies/sme</code></h3>
+                    <p>Companies listed on the SME market.</p>
+                    <pre><code>curl http://localhost:3000/market/companies/sme
+
+{
+  "companies": [
+    {
+      "Code ISIN": "DZ0000010060",
+      "Code": "AOM",
+      "Company name": "AOM invest",
+      "Sector / Category": "tourisme",
+      "Nominal Value  DA": "100",
+      "N of shares": "4 596 030"
+    }
+  ]
+}</code></pre>
+                </article>
+            </div>
+            <p class="note">Company field names are copied from the SGBV table headers and may change when the source website changes.</p>
+        </section>
+
+        <section>
+            <h2>Session history</h2>
+            <p><strong>Parameters:</strong> <code>market</code> is <code>main</code>, <code>bond</code>, or <code>sme</code>. <code>year</code> must be a four-digit year from 1999 through the current year.</p>
+            <div class="grid">
+                <article class="endpoint">
+                    <h3><span class="method">GET</span><code>/sessions/main/history/:year</code></h3>
+                    <pre><code>curl http://localhost:3000/sessions/main/history/2026
+
+{
+  "sessions": [
+    {
+      "N° of session": "2934",
+      "Date": "04/01/2026",
+      "Traded volume": "9006",
+      "Traded Value": "20 713 800,00",
+      "Number of Transactions": "10"
+    }
+  ]
+}</code></pre>
+                </article>
+                <article class="endpoint">
+                    <h3><span class="method">GET</span><code>/sessions/bond/history/:year</code></h3>
+                    <pre><code>curl http://localhost:3000/sessions/bond/history/2026
+
+{
+  "sessions": [
+    {
+      "N° of session": "2934",
+      "Date": "04/01/2026",
+      "Traded volume": "9006",
+      "Traded Value": "20 713 800,00",
+      "Number of Transactions": "10"
+    }
+  ]
+}</code></pre>
+                </article>
+                <article class="endpoint endpoint-wide">
+                    <h3><span class="method">GET</span><code>/sessions/sme/history/:year</code></h3>
+                    <pre><code>curl http://localhost:3000/sessions/sme/history/2026
+
+{
+  "sessions": [
+    {
+      "N° of session": "2934",
+      "Date": "04/01/2026",
+      "Traded volume": "9006",
+      "Traded Value": "20 713 800,00",
+      "Number of Transactions": "10"
+    }
+  ]
+}</code></pre>
+                </article>
+            </div>
+            <p class="note">The complete response may contain many sessions. Use the session number from this response with a details route.</p>
+        </section>
+
+        <section>
+            <h2>Session details</h2>
+            <p><strong>Parameter:</strong> <code>sessionID</code> must be a positive integer, such as <code>2934</code>. Details are returned in a <code>details</code> array.</p>
+            <div class="grid">
+                <article class="endpoint">
+                    <h3><span class="method">GET</span><code>/sessions/main/details/:sessionID</code></h3>
+                    <pre><code>curl http://localhost:3000/sessions/main/details/2934
+
+{
+  "details": [
+    {
+      "Name": "ALL",
+      "Price DA": "330,00",
+      "Traded volume": "0",
+      "Traded Value": "0,00",
+      "Number of Transactions": "0"
+    }
+  ]
+}</code></pre>
+                </article>
+                <article class="endpoint">
+                    <h3><span class="method">GET</span><code>/sessions/bond/details/:sessionID</code></h3>
+                    <pre><code>curl http://localhost:3000/sessions/bond/details/2934
+
+{
+  "details": [
+    {
+      "Name": "ML30",
+      "Price %": "100,00",
+      "Traded volume": "0",
+      "Traded Value": "0,00",
+      "Number of Transactions": "0"
+    }
+  ]
+}</code></pre>
+                </article>
+                <article class="endpoint endpoint-wide">
+                    <h3><span class="method">GET</span><code>/sessions/sme/details/:sessionID</code></h3>
+                    <pre><code>curl http://localhost:3000/sessions/sme/details/2934
+
+{
+  "details": [
+  ]
+}</code></pre>
+                </article>
+            </div>
+        </section>
+
+        <section>
+            <h2>JavaScript example</h2>
+            <pre><code>async function getMainHistory(year) {
+  const response = await fetch(
+    `http://localhost:3000/sessions/main/history/${year}`
+  )
+
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`)
+  }
+
+  const data = await response.json()
+  return data.sessions
+}</code></pre>
+        </section>
+
+        <section>
+            <h2>Errors</h2>
+            <p>Validation errors return <code>400</code>. Upstream or server errors return <code>500</code>.</p>
+            <div class="grid">
+                <article class="endpoint">
+                    <h3>Invalid year</h3>
+                    <pre><code>GET /sessions/main/history/1998
+
+HTTP 400
+{
+  "message": "Invalid year parameter must be between 1999 and 2026"
+}</code></pre>
+                </article>
+                <article class="endpoint">
+                    <h3>Invalid session ID</h3>
+                    <pre><code>GET /sessions/main/details/not-a-number
+
+HTTP 400
+{
+  "message": "A valid sessionID must be provided"
+}</code></pre>
+                </article>
+                <article class="endpoint endpoint-wide">
+                    <h3>Internal server error</h3>
+                    <pre><code>HTTP 500
+{
+  "message": "An internal server error has occurred"
+}</code></pre>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="shell">
+        Data source: <a href="https://www.sgbv.dz/" rel="noopener">SGBV — Bourse d'Algerie</a>
+    </footer>
+</body>
+</html>

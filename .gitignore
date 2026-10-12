@@ -1,2 +1,3 @@
 node_modules/
-src/sessions-history.html
+test.js
+.todo
